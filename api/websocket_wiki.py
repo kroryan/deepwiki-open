@@ -543,13 +543,33 @@ This file contains...
         try:
             if request.provider == "ollama":
                 # Get the response and handle it properly using the previously created api_kwargs
+                logger.info("Starting Ollama response processing")
                 response = await model.acall(api_kwargs=api_kwargs, model_type=ModelType.LLM)
+                logger.info(f"Ollama response type: {type(response)}")
+                
                 # Handle streaming response from Ollama
+                chunk_count = 0
                 async for chunk in response:
-                    text = getattr(chunk, 'response', None) or getattr(chunk, 'text', None) or str(chunk)
+                    chunk_count += 1
+                    logger.info(f"Received chunk {chunk_count}: {type(chunk)} - {str(chunk)[:100]}")
+                    
+                    # Extract text from Ollama ChatResponse object
+                    text = None
+                    if hasattr(chunk, 'message') and hasattr(chunk.message, 'content'):
+                        text = chunk.message.content
+                    elif hasattr(chunk, 'response'):
+                        text = chunk.response
+                    elif hasattr(chunk, 'text'):
+                        text = chunk.text
+                    else:
+                        text = str(chunk)
+                    
                     if text and not text.startswith('model=') and not text.startswith('created_at='):
                         text = text.replace('<think>', '').replace('</think>', '')
+                        logger.info(f"Sending text to websocket: {text[:50]}...")
                         await websocket.send_text(text)
+                
+                logger.info(f"Processed {chunk_count} chunks from Ollama")
                 # Explicitly close the WebSocket connection after the response is complete
                 await websocket.close()
             elif request.provider == "openrouter":
