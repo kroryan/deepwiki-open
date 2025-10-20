@@ -817,7 +817,7 @@ IMPORTANT FORMATTING INSTRUCTIONS:
 - Start directly with <wiki_structure> and end with </wiki_structure>
 
 IMPORTANT:
-1. Create ${isComprehensiveView ? '8-12' : '4-6'} pages that would make a ${isComprehensiveView ? 'comprehensive' : 'concise'} wiki for this repository
+1. Create ${isComprehensiveView ? '10-19' : '4-6'} pages that would make a ${isComprehensiveView ? 'comprehensive' : 'concise'} wiki for this repository
 2. Each page should focus on a specific aspect of the codebase (e.g., architecture, key features, setup)
 3. The relevant_files should be actual files from the repository that would be used to generate that page
 4. Return ONLY valid XML with the structure specified above, with no markdown code block delimiters`
