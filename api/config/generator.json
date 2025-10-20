@@ -71,7 +71,7 @@
         "o4-mini": {
           "temperature": 1.0
         },
-        "deepseek-chat": {
+        "deepseek-reasoner": {
           "temperature": 0.7,
           "top_p": 0.8
         }
